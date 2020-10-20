@@ -39,10 +39,35 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate{
         let cell: MyCollectionViewCell? = collectionView.dequeueReusableCell(withReuseIdentifier: "MyCollectionViewCell", for: indexPath) as? MyCollectionViewCell
         
         cell?.setup(evento: self.arrayEvento[indexPath.row])
+        // aqui ele ouve o delegate da myColletionview cell
+        cell?.delegate = self
         return cell ?? UICollectionViewCell()
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         print(self.arrayEvento[indexPath.row].nome)
+        
+        //evento na celula
+//        self.performSegue(withIdentifier: "DetailsViewController", sender: self.arrayEvento[indexPath.row])
+    }
+        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let evento: Evento? = sender as? Evento
+        let vc = segue.destination as? DetailsViewController
+        vc?.evento = evento
+        
+        
+    }
+}
+// declara o delegate acima na celula
+extension ViewController: MyCollectionViewCellDelegate{
+    func goDetailVEventVC(value: Evento?) {
+        print("ViewController======>MyCollectionViewCellDelegate========>goDetailVEventVC ===============>")
+        self.performSegue(withIdentifier: "DetailsViewController", sender: value)
     }
     
+    
 }
+
